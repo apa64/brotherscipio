@@ -25,10 +25,10 @@ public class BrotherScipio extends Robot {
     /** Scanner found a robot. */
     @Override
     public void onScannedRobot(ScannedRobotEvent e) {
-        out.println("onScannedRobot(), enemy=" + e.getName() + ", bearing=" + e.getBearing() + ", heading=" + getHeading() + ", gun=" + getGunHeading());
+//        out.println("onScannedRobot(), enemy=" + e.getName() + ", bearing=" + e.getBearing() + ", heading=" + getHeading() + ", gun=" + getGunHeading());
         double enemyAngle = getHeading() + e.getBearing();
         turnGunLeft(getGunHeading() - enemyAngle);
-        fire(0.1);
+        fire(6);
     }
 
     @Override

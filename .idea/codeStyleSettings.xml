@@ -7,6 +7,9 @@
         <option name="JD_ALIGN_EXCEPTION_COMMENTS" value="false" />
         <option name="JD_ADD_BLANK_AFTER_DESCRIPTION" value="false" />
         <option name="JD_DO_NOT_WRAP_ONE_LINE_COMMENTS" value="true" />
+        <XML>
+          <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+        </XML>
         <codeStyleSettings language="JAVA">
           <option name="ELSE_ON_NEW_LINE" value="true" />
           <option name="CATCH_ON_NEW_LINE" value="true" />
