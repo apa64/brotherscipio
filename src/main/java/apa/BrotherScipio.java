@@ -3,7 +3,8 @@ package apa;
 import robocode.*;
 
 public class BrotherScipio extends Robot {
-    private static final double RANGE_POINT_BLANK = 300;
+    private static final double RANGE_FAR = 400;
+    private static final double BEARING_PREDICT = 5;
 
     public static void main(String[] args) {
         System.out.println("+++ Brother Scipio requires Robocode +++");
@@ -26,9 +27,20 @@ public class BrotherScipio extends Robot {
     @Override
     public void onScannedRobot(ScannedRobotEvent e) {
 //        out.println("onScannedRobot(), enemy=" + e.getName() + ", bearing=" + e.getBearing() + ", heading=" + getHeading() + ", gun=" + getGunHeading());
-        double enemyAngle = getHeading() + e.getBearing();
-        turnGunLeft(getGunHeading() - enemyAngle);
-        fire(6);
+        double gunAdjust = getHeading() - getGunHeading() + e.getBearing();
+        gunAdjust = normalizeBearing(gunAdjust);
+        if (e.getVelocity() > 2) {
+            gunAdjust = gunAdjust > 0 ? gunAdjust + BEARING_PREDICT : gunAdjust - BEARING_PREDICT;
+        }
+        turnGunRight(gunAdjust);
+        fire(Math.min(RANGE_FAR / e.getDistance(), 3));
+    }
+
+    /** normalizes a bearing to between +180 and -180 */
+    double normalizeBearing(double angle) {
+        while (angle >  180) angle -= 360;
+        while (angle < -180) angle += 360;
+        return angle;
     }
 
     @Override
