@@ -1,37 +1,57 @@
 package apa;
 
-import robocode.Robot;
-import robocode.ScannedRobotEvent;
+import robocode.*;
 
 public class BrotherScipio extends Robot {
-    private static final double BEARING_LIMIT = 4;
+    private static final double RANGE_POINT_BLANK = 300;
+
+    public static void main(String[] args) {
+        System.out.println("+++ Brother Scipio requires Robocode +++");
+    }
 
     @Override
     public void run() {
+        // init bot
+        setAdjustRadarForGunTurn(true);
+        setAdjustGunForRobotTurn(true);
+        out.println("+++ Brother Scipio engaging +++");
         while (true) {
+            turnRadarRight(360);
             ahead(100);
-            turnRight(90);
-            /*
-            turnGunRight(360);
-            back(100);
-            turnGunRight(360);
-             */
+            turnRight(45);
         }
     }
 
+    /** Scanner found a robot. */
+    @Override
     public void onScannedRobot(ScannedRobotEvent e) {
-        double bearing = e.getBearing();
-        if (bearing > -BEARING_LIMIT && bearing < BEARING_LIMIT) {
-            // close enough
-            fire(5);
-        }
-        else if (bearing <= -BEARING_LIMIT) {
-            turnGunRight(bearing);
-            fire(1);
-        }
-        else {
-            turnGunLeft(bearing);
-            fire(1);
-        }
+        out.println("onScannedRobot(), enemy=" + e.getName() + ", bearing=" + e.getBearing() + ", heading=" + getHeading() + ", gun=" + getGunHeading());
+        double enemyAngle = getHeading() + e.getBearing();
+        turnGunLeft(getGunHeading() - enemyAngle);
+        fire(0.1);
+    }
+
+    @Override
+    public void onHitWall(HitWallEvent event) {
+        super.onHitWall(event);
+        // todo move away
+    }
+
+    @Override
+    public void onHitByBullet(HitByBulletEvent event) {
+        super.onHitByBullet(event);
+        // todo evasive action
+    }
+
+    /** Robot dies. */
+    @Override
+    public void onDeath(DeathEvent event) {
+        out.println("+++ " + Quotes.getFailureQuote() + " +++");
+    }
+
+    /** Robot kills. */
+    @Override
+    public void onRobotDeath(RobotDeathEvent event) {
+        out.println("+++ " + Quotes.getSuccessQuote() + " +++");
     }
 }
